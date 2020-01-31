@@ -7,19 +7,19 @@
         * People, appearances, teams
 
     DIMENSIONS ::
-        * namefirst, namelast, namegiven, height, g_all, team_id
+        * namefirst, namelast, namegiven, height, g_all, name
 
     FACTS ::
         * MIN(height) = 43
 
     FILTERS ::
-        * 
+        * LIMIT 10
 
     DESCRIPTION ::
         ...
 
     ANSWER ::
-        Eddie Gaedel aka Edward Carl at 43 inches. 
+        Eddie Gaedel aka Edward Carl, 43 inches tall, played in 1 game for the St. Louis Browns.
 
 */
 
@@ -28,10 +28,13 @@ SELECT
 	namefirst, 
 	namelast, 
 	MIN(height) AS height,
-	g_all
+	g_all,
+	t.name
 FROM people AS p
 INNER JOIN appearances AS a
 ON p.playerid = a.playerid
-GROUP BY namefirst, namelast, namegiven, height, g_all
+INNER JOIN teams AS t
+ON a.teamID = t.teamID
+GROUP BY namefirst, namelast, namegiven, height, g_all, t.name
 ORDER BY height ASC
-LIMIT 10;
+LIMIT 10; 
