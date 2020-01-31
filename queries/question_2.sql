@@ -37,4 +37,4 @@ INNER JOIN teams AS t
 ON a.teamID = t.teamID
 GROUP BY namefirst, namelast, namegiven, height, g_all, t.name
 ORDER BY height ASC
-LIMIT 10; 
+LIMIT 10;
