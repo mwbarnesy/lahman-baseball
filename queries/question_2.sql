@@ -4,7 +4,7 @@
 		How many games did he play in? What is the name of the team for which he played?
 
     SOURCES ::
-        * People, appearances, 
+        * People, appearances, teams
 
     DIMENSIONS ::
         * namefirst, namelast, namegiven, height
