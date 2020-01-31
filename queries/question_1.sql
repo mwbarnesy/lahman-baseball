@@ -9,20 +9,20 @@
         * yearid
 
     FACTS ::
-        * The minimum year is 1871
+        * The minimum year is 1871, the maximum year is 2016
 
     FILTERS ::
-        * GROUP BY yearid, ORDER BY yearid ASC
+        * N/A
 
     DESCRIPTION ::
         ...
 
     ANSWER ::
-        1871
+        1871 to 2016
 
 */
 
-SELECT MIN(yearid)
-FROM teams
-GROUP BY yearid
-ORDER BY yearid;
+SELECT 
+	MIN(yearid), 
+	MAX(yearid)
+FROM teams;
