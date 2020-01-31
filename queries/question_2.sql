@@ -7,7 +7,7 @@
         * People, appearances, teams
 
     DIMENSIONS ::
-        * namefirst, namelast, namegiven, height
+        * namefirst, namelast, namegiven, height, g_all, team_id
 
     FACTS ::
         * MIN(height) = 43
@@ -27,7 +27,11 @@ SELECT
 	namegiven, 
 	namefirst, 
 	namelast, 
-	MIN(height)
-FROM people
-GROUP BY namefirst, namelast, namegiven, height
-ORDER BY height;
+	MIN(height) AS height,
+	g_all
+FROM people AS p
+INNER JOIN appearances AS a
+ON p.playerid = a.playerid
+GROUP BY namefirst, namelast, namegiven, height, g_all
+ORDER BY height ASC
+LIMIT 10;
