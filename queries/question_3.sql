@@ -55,13 +55,15 @@ salary AS
 -- End of WITH clause
 
 -- In the outer query, select the schoolname from vandy, and playerid from collegeplaying.
-SELECT vandy.schoolname, c.playerid, p.namefirst, p.namelast
+SELECT vandy.schoolname, p.namefirst, p.namelast
 FROM vandy
--- Create an INNER JOIN to join vandy and collegeplaying ON schoolid
+-- Create an INNER JOIN to join vandy to collegeplaying ON schoolid
 INNER JOIN collegeplaying AS c
 ON vandy.schoolid = c.schoolid
+-- Create another INNER JOIN to join people to collegeplaying ON playerid
 INNER JOIN people AS p
 ON p.playerid = c.playerid
+GROUP BY p.namelast, p.namefirst, vandy.schoolname
 ;
 
 
