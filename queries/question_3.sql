@@ -44,8 +44,9 @@ WHERE schoolname ILIKE 'Vanderbilt%';
 */
 
 -- Create a CTE that SELECTS schoolid and schoolname WHERE schoolname = 'Vanderbilt University'.
--- Create a CTE that SELECTS the playerid and salary 
-WITH vandy AS
+-- Create a CTE that returns the playerid, and the total amount of monies earned from the salaries table.
+WITH 
+vandy AS
 	(
 	SELECT 
 		schoolid,
@@ -53,27 +54,33 @@ WITH vandy AS
 	FROM schools
 	WHERE schoolname = 'Vanderbilt University'
 	) -- End of vandy CTE
-	,
-	salary AS 
+,
+salary AS 
 	(
 	SELECT 
-		playerid,
-		SUM(salary)
+		playerid, -- This column was only included to test the salary CTE.
+		SUM(salary) AS total_monies
 	FROM salaries
+	GROUP BY playerid -- Must GROUP BY a non aggregated column.
+	-- ORDER BY total_monies DESC -- This allows me to see the highest earner at a glance.
+	-- The previous two lines were commented out because I wanted to test the query to make sure it worked. 
 	) -- End of salary CTE
+
 -- End of WITH clause
 	
 -- In the outer query, select the schoolname from vandy, and playerid from collegeplaying.
 SELECT vandy.schoolname, c.playerid
 FROM vandy
 -- Create an INNER JOIN to join vandy and collegeplaying ON schoolid
-INNER JOIN collegeplaying AS c --
+INNER JOIN collegeplaying AS c
 ON vandy.schoolid = c.schoolid
 ;
 
-/*SELECT
+/*
+SELECT
 	playerid
 FROM collegeplaying AS c;
+*/
 
 
 
