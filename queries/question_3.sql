@@ -73,6 +73,7 @@ GROUP BY p.namelast, p.namefirst, vandy.schoolname
 ;
 
 -- Let's take a look at the salaries table with the highest salary at the top.
+-- This is not tied into Vandy players.
 SELECT playerid, MAX(salary) AS salary
 FROM salaries
 GROUP BY playerid
