@@ -28,12 +28,34 @@
 
 */
 
---Find all players in the database who played at Vanderbilt University.
-SELECT 
-	playerid,
-	schoolid
-FROM collegeplaying;
 
+
+
+
+ 
+/* 
+This WHERE clause meant to find Vanderbilt University from the schools table
+===
+SELECT DISTINCT(schoolname)
+FROM schools
+WHERE schoolname ILIKE 'Vanderbilt%';
+===
+*/
+
+/*
+Now that I have the correct name for the university, 
+ */
+SELECT
+	(
+	SELECT schoolname
+	FROM schools
+	WHERE schoolname = 'Vanderbilt University'
+	) AS vandy,
+	playerid
+FROM collegeplaying AS c;
+
+
+--Find all players in the database who played at Vanderbilt University.
 
 /*SELECT 
 	p.namefirst, 
