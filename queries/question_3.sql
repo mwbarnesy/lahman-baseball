@@ -28,10 +28,7 @@
 
 */
 
-
-
-
-
+-- PART ONE: Find all players in the database who played at Vanderbilt University.
  
 /* 
 This WHERE clause meant to find Vanderbilt University from the schools table
@@ -43,19 +40,45 @@ WHERE schoolname ILIKE 'Vanderbilt%';
 */
 
 /*
-Now that I have the correct name for the university, 
- */
-SELECT
+
+*/
+
+-- Create a CTE that SELECTS schoolid and schoolname WHERE schoolname = 'Vanderbilt University'.
+-- Create a CTE that SELECTS the playerid and salary 
+WITH vandy AS
 	(
-	SELECT schoolname
+	SELECT 
+		schoolid,
+		schoolname
 	FROM schools
 	WHERE schoolname = 'Vanderbilt University'
-	) AS vandy,
+	) -- End of vandy CTE
+	,
+	salary AS 
+	(
+	SELECT 
+		playerid,
+		SUM(salary)
+	FROM salaries
+	) -- End of salary CTE
+-- End of WITH clause
+	
+-- In the outer query, select the schoolname from vandy, and playerid from collegeplaying.
+SELECT vandy.schoolname, c.playerid
+FROM vandy
+-- Create an INNER JOIN to join vandy and collegeplaying ON schoolid
+INNER JOIN collegeplaying AS c --
+ON vandy.schoolid = c.schoolid
+;
+
+/*SELECT
 	playerid
 FROM collegeplaying AS c;
 
 
---Find all players in the database who played at Vanderbilt University.
+
+
+
 
 /*SELECT 
 	p.namefirst, 
