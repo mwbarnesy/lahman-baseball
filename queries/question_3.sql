@@ -29,22 +29,9 @@
 */
 
 -- PART ONE: Find all players in the database who played at Vanderbilt University.
- 
-/* 
-This WHERE clause meant to find Vanderbilt University from the schools table
-===
-SELECT DISTINCT(schoolname)
-FROM schools
-WHERE schoolname ILIKE 'Vanderbilt%';
-===
-*/
-
-/*
-
-*/
 
 -- Create a CTE that SELECTS schoolid and schoolname WHERE schoolname = 'Vanderbilt University'.
--- Create a CTE that returns the playerid, and the total amount of monies earned from the salaries table.
+-- Create a CTE that returns the playerid, and the total monies earned from the salaries table.
 WITH 
 vandy AS
 	(
@@ -65,37 +52,22 @@ salary AS
 	-- ORDER BY total_monies DESC -- This allows me to see the highest earner at a glance.
 	-- The previous two lines were commented out because I wanted to test the query to make sure it worked. 
 	) -- End of salary CTE
-
 -- End of WITH clause
-	
+
 -- In the outer query, select the schoolname from vandy, and playerid from collegeplaying.
-SELECT vandy.schoolname, c.playerid
+SELECT vandy.schoolname, c.playerid, p.namefirst, p.namelast
 FROM vandy
 -- Create an INNER JOIN to join vandy and collegeplaying ON schoolid
 INNER JOIN collegeplaying AS c
 ON vandy.schoolid = c.schoolid
+INNER JOIN people AS p
+ON p.playerid = c.playerid
 ;
 
-/*
-SELECT
-	playerid
-FROM collegeplaying AS c;
-*/
 
 
 
 
 
 
-/*SELECT 
-	p.namefirst, 
-	p.namelast, 
-	s.schoolname
-FROM people AS p
-INNER JOIN collegeplaying AS c
-	ON p.playerid = c.playerid
-INNER JOIN schools AS s
-	ON c.schoolid = s.schoolid
-	WHERE schoolname = 'Vanderbilt'
-GROUP BY p.namefirst, p.namelast, s.schoolname
-;*/
+
