@@ -15,7 +15,7 @@
 		* salaries = playerid, salary
 
     FACTS ::
-        * SUM(salary)
+        * 
 
     FILTERS ::
         * ...
@@ -24,7 +24,7 @@
         ...
 
     ANSWER ::
-        ...
+        David Price made the most money in the major leauges.
 
 */
 
@@ -82,16 +82,18 @@ SELECT people.playerid, SUM(salary) AS salary
 FROM salaries
 	INNER JOIN people
 	ON salaries.playerid = people.playerid
+WHERE people.playerid = 'priceda01'
 GROUP BY people.playerid
 ORDER BY salary DESC;
 */
 
 -- Let's create a CTE that joins the schools table to the collegeplaying table.
 
+/*
 WITH vandy AS
 	(
 		SELECT 
-			c.playerid, 
+			DISTINCT(c.playerid), 
 			s.schoolname
 		FROM schools as s
 			INNER JOIN collegeplaying AS c
@@ -105,16 +107,98 @@ SELECT
 	p.namefirst,
 	p.namelast,
 	vandy.schoolname, 
-	SUM(s.salary) AS salary
+	SUM(s.salary) AS total_salary
 FROM vandy
 		INNER JOIN salaries AS s
 			ON s.playerid = vandy.playerid
 		INNER JOIN people AS p
 			ON vandy.playerid = p.playerid
 GROUP BY vandy.playerid, vandy.schoolname, s.salary, p.namefirst, p.namelast
-ORDER BY s.salary DESC
+ORDER BY total_salary DESC
+;
+*/
+
+-- Let's start with the salaries table instead.
+
+WITH 
+total_earned AS 
+	(
+		SELECT
+			s.playerid,
+			p.namefirst,
+			p.namelast,
+			SUM(salary) AS total_earned
+		FROM salaries AS s
+			INNER JOIN people AS p
+				ON s.playerid = p.playerid
+		GROUP BY s.playerid, p.namefirst, p.namelast
+		ORDER BY total_earned DESC;
+	)
+,
+vandy AS 
+	(
+		SELECT 
+			c.playerid,
+			s.schoolid,
+			s.schoolname
+		FROM schools AS s
+			INNER JOIN collegeplaying AS c
+			ON s.schoolid = c.schoolid
+		WHERE schoolname = 'Vanderbilt University';
+	)
+SELECT
+	namefirst,
+	namelast
+FROM people	
 ;
 
+
+
+
+
+SELECT
+	sal.playerid,
+	salary,
+	sch.schoolname
+FROM salaries AS sal
+		INNER JOIN collegeplaying AS c
+		ON sal.playerid = c.playerid
+		INNER JOIN schools AS sch
+		ON c.schoolid = sch.schoolid
+WHERE sch.schoolname = 'Vanderbilt University'
+GROUP BY sal.playerid, salary, sch.schoolname
+ORDER BY salary DESC;
+
+
+
+
+
+WITH 
+player_salary AS
+	(
+		SELECT 
+			DISTINCT(p.playerid)
+			namefirst,
+			namelast,
+			SUM(s.salary) AS total_earned
+		FROM people AS p
+			INNER JOIN salaries AS s
+				ON p.playerid = s.playerid
+		GROUP BY p.playerid
+		ORDER BY total_earned DESC
+		;
+	)
+player_school AS 
+	(
+		SELECT 
+			c.playerid,
+			s.schoolid,
+			s.schoolname
+		FROM schools AS s
+			INNER JOIN collegeplaying AS c
+			ON s.schoolid = c.schoolid
+		WHERE schoolname = 'Vanderbilt University';
+	)
 
 
 
