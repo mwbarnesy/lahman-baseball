@@ -203,7 +203,7 @@ player_school AS
 		-- ;
 	)
 
-
+/*
 SELECT 
 	p.namefirst,
 	p.namelast,
@@ -223,8 +223,34 @@ GROUP BY namefirst, namelast, s.schoolname
 ORDER BY total_earned DESC
 ;
 
+*/
 
+/*
+SELECT
+	DISTINCT(s.playerid),
+	schoolid,
+	SUM(s.salary) AS total_earned,
+	'Vanderbilt University' As schoolname
+FROM collegeplaying AS c
 
+	INNER JOIN salaries AS s
+		ON c.playerid = s.playerid
+WHERE schoolid = 'vandy'
+GROUP BY s.playerid, schoolid
+ORDER BY total_earned DESC
+;
+*/
 
+SELECT 
+	DISTINCT(playerid)
+FROM collegeplaying
+WHERE schoolid = 'vandy';
 
+SELECT 
+	DISTINCT(playerid),
+	SUM(salary) AS total_earned
+FROM salaries
+GROUP BY playerid
+ORDER BY total_earned DESC;
+	
 
