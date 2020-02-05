@@ -15,16 +15,19 @@
 		* salaries = playerid, salary
 
     FACTS ::
-        * 
+        SUM(salary) to get the total salary. 
 
     FILTERS ::
-        * ...
+        WHERE schoolname = 'Vanderbilt University'.
 
     DESCRIPTION ::
-        ...
+        After many attempts to write a CTE to help solve the problem, I decided to rely solely on JOINS.
+		I could make each query of the CTE work independently, but not together. Once I realized I could 
+		get the results I wanted using INNER JOINS, it came down to figuring out where the WHERE filter 
+		would be happy. 
 
     ANSWER ::
-        David Price made the most money in the major leauges.
+        David Price made $245,553,888 in the majors.
 
 */
 
@@ -186,20 +189,37 @@ player_salary AS
 				ON p.playerid = s.playerid
 		GROUP BY p.playerid
 		ORDER BY total_earned DESC
-		;
+		-- ;
 	)
 player_school AS 
 	(
 		SELECT 
 			c.playerid,
-			s.schoolid,
 			s.schoolname
 		FROM schools AS s
 			INNER JOIN collegeplaying AS c
 			ON s.schoolid = c.schoolid
-		WHERE schoolname = 'Vanderbilt University';
+		WHERE schoolname = 'Vanderbilt University'
+		-- ;
 	)
 
+
+SELECT 
+	p.namefirst,
+	p.namelast,
+	s.schoolname,
+	SUM(sal.salary) AS total_earned
+FROM people AS p
+	INNER JOIN collegeplaying AS c
+		ON p.playerid = c.playerid
+	INNER JOIN schools AS s
+		ON c.schoolid = s.schoolid
+	INNER JOIN salaries AS sal
+		ON p.playerid = sal.playerid
+WHERE schoolname = 'Vanderbilt University'
+GROUP BY namefirst, namelast, s.schoolname
+ORDER BY total_earned DESC
+;
 
 
 
