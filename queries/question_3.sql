@@ -27,7 +27,7 @@
 		would be happy. 
 
     ANSWER ::
-        David Price made $245,553,888 in the majors.
+        College playing has duplicate playerid values, which is changing my results!
 
 */
 
@@ -210,13 +210,15 @@ SELECT
 	s.schoolname,
 	SUM(sal.salary) AS total_earned
 FROM people AS p
-	INNER JOIN collegeplaying AS c
-		ON p.playerid = c.playerid
+	
 	INNER JOIN schools AS s
 		ON c.schoolid = s.schoolid
+	INNER JOIN collegeplaying AS c
+		ON p.playerid = c.playerid
+		AND s.schoolname = 'Vanderbilt University'
 	INNER JOIN salaries AS sal
 		ON p.playerid = sal.playerid
-WHERE schoolname = 'Vanderbilt University'
+
 GROUP BY namefirst, namelast, s.schoolname
 ORDER BY total_earned DESC
 ;
