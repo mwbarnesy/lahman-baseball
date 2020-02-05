@@ -21,15 +21,41 @@
         WHERE schoolname = 'Vanderbilt University'.
 
     DESCRIPTION ::
-        After many attempts to write a CTE to help solve the problem, I decided to rely solely on JOINS.
-		I could make each query of the CTE work independently, but not together. Once I realized I could 
-		get the results I wanted using INNER JOINS, it came down to figuring out where the WHERE filter 
-		would be happy. 
+        It was pointed out to me that the collegeplaying table had duplicate entries for a single playerid, 
+		so this was doubling or tripling my results. At one point, I had the highest earner making $250 million or so.
+		Taylor helped me with a handy subquery that returned DISTINCT playerids from the collegeplaying table. 
 
     ANSWER ::
-        College playing has duplicate playerid values, which is changing my results!
+        David Price made $81,851,296.00 total in the major leagues.
 
 */
+
+SELECT 
+		p.namefirst,
+		p.namelast,
+		CAST(CAST(SUM(s.salary) AS numeric) AS money) AS total_earned,
+		schools.schoolname
+	FROM schools
+		INNER JOIN ( -- Here we used a subquery inside of a JOIN that allows us to pull playerid from collegeplaying
+					 -- without any duplicates. Note: DISTINCT playerid, schoolid!
+			SELECT DISTINCT playerid, schoolid
+				FROM collegeplaying
+			) AS cp USING (schoolid)
+		INNER JOIN people AS p
+			USING (playerid)
+		INNER JOIN salaries AS s
+			USING (playerid)
+WHERE schoolname = 'Vanderbilt University'
+GROUP BY p.namefirst, p.namelast, schools.schoolname
+ORDER BY total_earned DESC
+;
+
+
+
+
+
+-- Begin old queries
+
 
 -- PART ONE: Find all players in the database who played at Vanderbilt University.
 -- PART TWO: List all players, first and last name, and the total salary earned in the major leagues.
@@ -119,7 +145,7 @@ FROM vandy
 GROUP BY vandy.playerid, vandy.schoolname, s.salary, p.namefirst, p.namelast
 ORDER BY total_salary DESC
 ;
-*/
+
 
 -- Let's start with the salaries table instead.
 
@@ -222,7 +248,6 @@ FROM people AS p
 GROUP BY namefirst, namelast, s.schoolname
 ORDER BY total_earned DESC
 ;
-
 */
 
 /*
@@ -239,11 +264,11 @@ WHERE schoolid = 'vandy'
 GROUP BY s.playerid, schoolid
 ORDER BY total_earned DESC
 ;
-*/
 
 SELECT 
-	DISTINCT(playerid)
-FROM collegeplaying
+	DISTINCT(playerid),
+	schoolid
+FROM collegeplaying AS cp
 WHERE schoolid = 'vandy';
 
 SELECT 
@@ -252,5 +277,29 @@ SELECT
 FROM salaries
 GROUP BY playerid
 ORDER BY total_earned DESC;
-	
+*/ 
 
+/* 
+
+===================TAYLOR'S CODE===================
+
+SELECT
+       p.namefirst || ' ' || p.namelast as name,
+       sum(s.salary)::numeric::money as total_salary
+  FROM schools
+       -- the goal here is to return one player per school
+       INNER JOIN (
+             SELECT DISTINCT playerid, schoolid
+               FROM collegeplaying
+       -- this guy makes sure we are only pulling vandy players
+       ) cp USING(schoolid) 
+       -- now, we can join to people and salaries knowing we dont have duplicate players
+       INNER JOIN people p USING(playerid)
+       INNER JOIN salaries s USING(playerid)
+ -- keeping vandy filter in the where clause (pretending we don't know the id)
+ WHERE schoolname = 'Vanderbilt University'
+ GROUP BY p.namefirst,  p.namelast
+ ORDER BY total_salary DESC
+ LIMIT 1;
+
+*/
