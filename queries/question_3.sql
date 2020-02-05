@@ -31,6 +31,7 @@
 -- PART ONE: Find all players in the database who played at Vanderbilt University.
 -- PART TWO: List all players, first and last name, and the total salary earned in the major leagues.
 
+/*
 WITH 
 	vandy AS -- Create a CTE that SELECTs schoolid and schoolname WHERE schoolname = 'Vanderbilt University'.
 	(
@@ -71,15 +72,49 @@ ON p.playerid = c.playerid
 -- GROUP BY last name gets rid of duplicate rows.
 GROUP BY p.namelast, p.namefirst, vandy.schoolname
 ;
+*/
 
 -- Let's take a look at the salaries table with the highest salary at the top.
 -- This is not tied into Vandy players yet.
+
+/*
 SELECT people.playerid, SUM(salary) AS salary
 FROM salaries
 	INNER JOIN people
 	ON salaries.playerid = people.playerid
 GROUP BY people.playerid
 ORDER BY salary DESC;
+*/
+
+-- Let's create a CTE that joins the schools table to the collegeplaying table.
+
+WITH vandy AS
+	(
+		SELECT 
+			c.playerid, 
+			s.schoolname
+		FROM schools as s
+			INNER JOIN collegeplaying AS c
+				ON s.schoolid = c.schoolid
+		WHERE s.schoolname = 'Vanderbilt University'
+		GROUP BY c.playerid, s.schoolname
+	)
+-- Begin main query
+SELECT 
+	vandy.playerid,
+	p.namefirst,
+	p.namelast,
+	vandy.schoolname, 
+	SUM(s.salary) AS salary
+FROM vandy
+		INNER JOIN salaries AS s
+			ON s.playerid = vandy.playerid
+		INNER JOIN people AS p
+			ON vandy.playerid = p.playerid
+GROUP BY vandy.playerid, vandy.schoolname, s.salary, p.namefirst, p.namelast
+ORDER BY s.salary DESC
+;
+
 
 
 
