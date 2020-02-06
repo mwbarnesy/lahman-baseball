@@ -6,23 +6,26 @@
 		three groups in 2016.
 
     SOURCES ::
-        People table, fielding table
+        Fielding table
 
     DIMENSIONS ::
-        Playerid, 
+        po, pos
 		
     FACTS ::
-        * ...
+       	SUM(PO)
 
     FILTERS ::
-        * ...
+        HAVING yearid = '2016'
 
     DESCRIPTION ::
-        ...
+        Intially I started with a CASE statement, but I think I was approaching the problem in the wrong order.
+		When I decided to focus on SUM of POs, I was then able to tack on the CASE statement and GROUP BY the 
+		various postion_groups (Outfield, Infield, and battery).
 
     ANSWER ::
-        ...
-
+        29560 - Outfield
+		58934 - Infield
+		41424 - Battery
 */
 
 SELECT 
