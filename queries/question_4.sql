@@ -25,13 +25,14 @@
 
 */
 
+
 SELECT 
 	p.playerid,
-	p.namefirst,
-	p.namelast, 
 	f.pos,
-		CASE 
-			WHEN pos = '1B' THEN 'Infield'
+	f.PO--,
+		/*
+		CASE
+			WHEN pos = '1B' THEN 'Infield' 
 			WHEN pos = '2B' THEN 'Infield'
 			WHEN pos = 'SS' THEN 'Infield'
 			WHEN pos = '3B' THEN 'Infield'
@@ -39,8 +40,9 @@ SELECT
 			WHEN pos = 'P' THEN 'Battery'
 			WHEN pos = 'C' THEN 'Battery'
 		END AS position_groups
+		*/
 FROM people AS p
 	INNER JOIN fielding AS f
 	ON p.playerid = f.playerid
-GROUP BY p.playerid, p.namefirst, p.namelast, f.pos, position_groups
+GROUP BY p.playerid, f.pos, f.PO--, position_groups
 ;
