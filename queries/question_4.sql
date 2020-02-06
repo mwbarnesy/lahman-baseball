@@ -25,11 +25,9 @@
 
 */
 
-
 SELECT 
-	p.playerid,
-	f.PO,
-		CASE
+	SUM(PO) AS total_putouts,
+	CASE
 			WHEN pos = '1B' THEN 'Infield' 
 			WHEN pos = '2B' THEN 'Infield'
 			WHEN pos = 'SS' THEN 'Infield'
@@ -38,8 +36,7 @@ SELECT
 			WHEN pos = 'P' THEN 'Battery'
 			WHEN pos = 'C' THEN 'Battery'
 		END AS position_groups
-FROM people AS p
-	INNER JOIN fielding AS f
-	ON p.playerid = f.playerid
-GROUP BY p.playerid, f.PO, position_groups
+FROM fielding
+GROUP BY position_groups
+
 ;
