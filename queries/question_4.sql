@@ -26,6 +26,7 @@
 */
 
 SELECT 
+	yearid,
 	SUM(PO) AS total_putouts,
 	CASE
 			WHEN pos = '1B' THEN 'Infield' 
@@ -37,6 +38,6 @@ SELECT
 			WHEN pos = 'C' THEN 'Battery'
 		END AS position_groups
 FROM fielding
-GROUP BY position_groups
-
+GROUP BY position_groups, yearid
+HAVING yearid = '2016'
 ;
