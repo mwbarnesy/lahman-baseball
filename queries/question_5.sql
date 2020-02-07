@@ -22,15 +22,41 @@
 
 */
 
+/* 
+
 WITH total_games AS
 (
 		SELECT 
 			SUM(games)
 		FROM homegames
-		WHERE year >= 1920 ; 
-)
+		WHERE year >= 1920 
+) 
 
-
+*/
+SELECT 	 
+			/*
+			CAST(SUM(g) / 2 AS numeric) AS total_games_decade, -- Returns the sum of games divided by two
+			ROUND(AVG(so), 2) AS avg_so_decade, -- Average strikeout per decade
+			ROUND(AVG(hr), 2) AS avg_hr_decade, -- Average homerun per decade
+			*/
+			
+			ROUND(AVG(so) / CAST(SUM(g) / 2 AS numeric), 2) AS avg_so_game,
+			CASE
+				WHEN yearid BETWEEN 1920 AND 1929 THEN 'Twenties'
+				WHEN yearid BETWEEN 1930 AND 1939 THEN 'Thirties' 
+				WHEN yearid BETWEEN 1940 AND 1949 THEN 'Forties'
+				WHEN yearid BETWEEN 1950 AND 1959 THEN 'Fifties' 
+				WHEN yearid BETWEEN 1960 AND 1969 THEN 'Sixties' 
+				WHEN yearid BETWEEN 1970 AND 1979 THEN 'Seventies' 
+				WHEN yearid BETWEEN 1980 AND 1989 THEN 'Eighties' 
+				WHEN yearid BETWEEN 1990 AND 1999 THEN 'Nineties' 
+				WHEN yearid BETWEEN 2000 AND 2009 THEN 'Two Thousands' 
+				WHEN yearid BETWEEN 2010 AND 2020 THEN 'Twenty Tens' 
+					ELSE 'Not of interest' END AS decade
+FROM teams
+WHERE yearid >= 1920
+GROUP BY decade
+;
 
 
 
