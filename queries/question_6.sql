@@ -26,9 +26,14 @@
 */
 
 SELECT
-	playerid,
-	SUM(SB) + SUM(CS) AS sb_attempts
-FROM batting
+	p.namefirst || ' ' || p.namelast AS player_name, -- CONCAT shorthand with a space between ' '
+	SUM(sb + cs) AS sb_attempts
+FROM batting AS b
+		INNER JOIN people AS p
+		ON b.playerid = p.playerid
 WHERE yearid = 2016
-GROUP BY playerid
+	AND sb IS NOT NULL
+	AND cs IS NOT NULL
+GROUP BY p.namefirst, p.namelast
+ORDER BY sb_attempts DESC -- REMEMBER, you are looking for the best percentage, not the most attempts.
 ;
