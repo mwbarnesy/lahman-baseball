@@ -22,6 +22,20 @@
 
 */
 
+WITH total_games AS
+(
+		SELECT 
+			SUM(games)
+		FROM homegames
+		WHERE year >= 1920 ; 
+)
+
+
+
+
+
+/*
+
 SELECT 
 			CAST(SUM(g) / 2 AS numeric) AS total_games,
 			CAST(ROUND(AVG(so), 2) AS numeric) / CAST(SUM(g) / 2 AS numeric) AS avg_so,
@@ -43,6 +57,12 @@ SELECT
 		GROUP BY decade
 
 ;
+
+*/
+
+
+
+
 
 
 /*
