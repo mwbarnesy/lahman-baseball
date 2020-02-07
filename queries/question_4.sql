@@ -6,32 +6,33 @@
 		three groups in 2016.
 
     SOURCES ::
-        People table, fielding table
+        Fielding table
 
     DIMENSIONS ::
-        Playerid, 
+        po, pos
 		
     FACTS ::
-        * ...
+       	SUM(PO)
 
     FILTERS ::
-        * ...
+        HAVING yearid = '2016'
 
     DESCRIPTION ::
-        ...
+        Intially I started with a CASE statement, but I think I was approaching the problem in the wrong order.
+		When I decided to focus on SUM of POs, I was then able to tack on the CASE statement and GROUP BY the 
+		various postion_groups (Outfield, Infield, and battery).
 
     ANSWER ::
-        ...
-
+        29560 - Outfield
+		58934 - Infield
+		41424 - Battery
 */
 
 SELECT 
-	p.playerid,
-	p.namefirst,
-	p.namelast, 
-	f.pos,
-		CASE 
-			WHEN pos = '1B' THEN 'Infield'
+	yearid,
+	SUM(PO) AS total_putouts,
+	CASE
+			WHEN pos = '1B' THEN 'Infield' 
 			WHEN pos = '2B' THEN 'Infield'
 			WHEN pos = 'SS' THEN 'Infield'
 			WHEN pos = '3B' THEN 'Infield'
@@ -39,8 +40,7 @@ SELECT
 			WHEN pos = 'P' THEN 'Battery'
 			WHEN pos = 'C' THEN 'Battery'
 		END AS position_groups
-FROM people AS p
-	INNER JOIN fielding AS f
-	ON p.playerid = f.playerid
-GROUP BY p.playerid, p.namefirst, p.namelast, f.pos, position_groups
+FROM fielding
+GROUP BY position_groups, yearid
+HAVING yearid = '2016'
 ;
