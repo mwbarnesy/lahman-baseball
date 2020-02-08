@@ -22,11 +22,14 @@
         ...
 
     ANSWER ::
-        Seattle had 116 wins and lost the world series in 2001, and the Los Angeles Dodgers won 63 games
-		and won the world series in 1981. The sum of the Dodgers games added to 110, not 162 like the other
-		rows. This was due to a player's strike, as reported by Wikipedia. 
+        The St. Louis Cardinals had 105 wins and lost the world series in 2004, and the Los Angeles Dodgers won 63 
+		games and won the world series in 1981. The sum of the Dodgers' wins and losses added to 110, not 162 like 
+		the other rows. This was due to a player's strike, as reported by Wikipedia. 
 		
 		https://en.wikipedia.org/wiki/1981_Major_League_Baseball_season
+		
+		Without the 1981 world series in the report, we find that the 2006 cardinals won 83 games and also
+		won the world series.
 		
 		
 
@@ -44,8 +47,7 @@ SELECT
 FROM teams
 WHERE yearid BETWEEN 1970 AND 2016
 	AND yearid <> 1981
-	--AND wswin = 'Y'
-	AND wswin IS NOT NULL
+	AND wswin = 'Y'
 GROUP BY yearid, teamid, name, w, l, wswin
 ORDER BY w ASC
 ;
@@ -63,6 +65,7 @@ SELECT
 FROM teams
 WHERE yearid BETWEEN 1970 AND 2016
 	AND wswin = 'N'
+	AND lgwin = 'Y'
 GROUP BY yearid, teamid, name, w, l, wswin
 ORDER BY w DESC
 ;
@@ -72,11 +75,20 @@ ORDER BY w DESC
 SELECT 
 	DISTINCT(s.yearid), 
 	s.teamidwinner,
-	s.teamidloser
+	s.teamidloser,
+	t.w AS winners_wins,
+	t.l AS winners_losses
 FROM seriespost AS s
+	INNER JOIN teams AS t
+	ON s.yearid = t.yearid
 WHERE s.yearid BETWEEN 1970 AND 2016
 	AND s.yearid <> 1981
 	AND s.round = 'WS'
-GROUP BY s.yearid, s.teamidwinner, s.teamidloser
+	AND t.wswin = 'Y'
+	AND t.lgwin = 'Y'
+	AND t.wswin IS NOT NULL
+GROUP BY s.yearid, s.teamidwinner, s.teamidloser, t.w, t.l
 ORDER BY s.yearid
 ;
+
+	
