@@ -25,9 +25,23 @@
 
 */
 
+SELECT 
+	playerid, 
+	sb, 
+	cs,
+	sb + cs AS sb_attemptsb --,
+	--sb / (sb + cs) AS success -- not working like I thought it would
+FROM batting 
+WHERE yearid = 2016
+	AND sb + cs >= 20
+ORDER BY sb DESC
+;
+
+
+
 SELECT
 	p.namefirst || ' ' || p.namelast AS player_name, -- CONCAT shorthand with a space between ' '
-	SUM(sb + cs) AS sb_attempts
+	SUM(sb) + SUM(cs) AS sb_attempts
 FROM batting AS b
 		INNER JOIN people AS p
 		ON b.playerid = p.playerid
