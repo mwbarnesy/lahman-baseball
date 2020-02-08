@@ -91,4 +91,15 @@ GROUP BY s.yearid, s.teamidwinner, s.teamidloser, t.w, t.l
 ORDER BY s.yearid
 ;
 
-	
+SELECT 
+	DISTINCT(t.yearid), 
+	t.teamid,
+	t.w,
+	t.l
+FROM teams AS t
+	INNER JOIN seriespost AS s
+	ON t.yearid = s.yearid
+WHERE t.yearid BETWEEN 1970 AND 2016
+	AND lgwin = 'Y'
+ORDER BY t.yearid
+;
