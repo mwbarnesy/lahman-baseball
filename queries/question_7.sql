@@ -16,7 +16,7 @@
         * ...
 
     FILTERS ::
-        year 1970 to 2016
+        year 1970 to 2016, minus 1981
 
     DESCRIPTION ::
         ...
@@ -101,5 +101,57 @@ FROM teams AS t
 	ON t.yearid = s.yearid
 WHERE t.yearid BETWEEN 1970 AND 2016
 	AND lgwin = 'Y'
+GROUP BY 
+	t.yearid,
+	t.teamid,
+	t.w,
+	t.l
 ORDER BY t.yearid
 ;
+
+
+
+
+
+SELECT 
+	yearid,
+	teamidwinner,
+	teamidloser
+FROM seriespost
+WHERE yearid BETWEEN 1970 AND 2016
+	AND yearid <> 1981
+	AND round = 'WS'
+;
+
+SELECT
+	yearid, 
+	teamid,
+	MAX(w) AS most_wins,
+	l
+FROM teams
+WHERE yearid BETWEEN 1970 AND 2016
+	AND yearid <> 1981
+	AND lgwin = 'Y'
+GROUP BY yearid, teamid, l, wswin
+ORDER BY most_wins DESC
+;
+
+
+
+SELECT 
+	yearid,
+	MAX(w) AS max_wins,
+	(
+		SELECT 
+			COUNT(wswin)
+		FROM teams
+		WHERE wswin = 'Y'
+	)
+FROM teams
+WHERE yearid BETWEEN 1970 AND 2016
+	AND yearid <> 1981
+	--AND lgwin = 'Y'
+GROUP BY yearid
+ORDER BY yearid
+;
+
