@@ -16,20 +16,24 @@
         * ...
 
     FILTERS ::
-        year 1970 to 2016
+        year 1970 to 2016, minus 1981
 
     DESCRIPTION ::
-        ...
+        The wswin column says a team lost the world series whether the team went to the world series or not, 
+		so technically the team didn't lose the world series. I filtered these results by using lgwin to be sure
+		all teams actually played and lost in the world series.
 
     ANSWER ::
         The St. Louis Cardinals had 105 wins and lost the world series in 2004, and the Los Angeles Dodgers won 63 
 		games and won the world series in 1981. The sum of the Dodgers' wins and losses added to 110, not 162 like 
-		the other rows. This was due to a player's strike, as reported by Wikipedia. 
+		the other rows. This was due to a player's strike, as reported by Wikipedia.
 		
 		https://en.wikipedia.org/wiki/1981_Major_League_Baseball_season
 		
 		Without the 1981 world series in the report, we find that the 2006 cardinals won 83 games and also
 		won the world series.
+		
+		
 		
 		
 
@@ -101,5 +105,57 @@ FROM teams AS t
 	ON t.yearid = s.yearid
 WHERE t.yearid BETWEEN 1970 AND 2016
 	AND lgwin = 'Y'
+GROUP BY 
+	t.yearid,
+	t.teamid,
+	t.w,
+	t.l
 ORDER BY t.yearid
 ;
+
+
+
+
+
+SELECT 
+	yearid,
+	teamidwinner,
+	teamidloser
+FROM seriespost
+WHERE yearid BETWEEN 1970 AND 2016
+	AND yearid <> 1981
+	AND round = 'WS'
+;
+
+SELECT
+	yearid, 
+	teamid,
+	MAX(w) AS most_wins,
+	l
+FROM teams
+WHERE yearid BETWEEN 1970 AND 2016
+	AND yearid <> 1981
+	AND lgwin = 'Y'
+GROUP BY yearid, teamid, l, wswin
+ORDER BY most_wins DESC
+;
+
+
+
+SELECT 
+	yearid,
+	MAX(w) AS max_wins,
+	(
+		SELECT 
+			COUNT(wswin)
+		FROM teams
+		WHERE wswin = 'Y'
+	)
+FROM teams
+WHERE yearid BETWEEN 1970 AND 2016
+	AND yearid <> 1981
+	--AND lgwin = 'Y'
+GROUP BY yearid
+ORDER BY yearid
+;
+
