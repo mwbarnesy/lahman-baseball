@@ -7,16 +7,16 @@
 		average attendance.
 
     SOURCES ::
-        * ...
+        * Homegames table, parks table, teams table
 
     DIMENSIONS ::
-        * ...
+        * Park name, team name, average attendance
 
     FACTS ::
-        * ...
+        * 
 
     FILTERS ::
-        * ...
+        * WHERE number of games > 10, year = 2016, top 5 and lowest 5 average attendance
 
     DESCRIPTION ::
         ...
@@ -26,5 +26,6 @@
 
 */
 
-SELECT *
-FROM ...;
+SELECT team, park, games, attendance
+FROM homegames
+WHERE games > 10 AND year = 2016;
