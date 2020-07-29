@@ -29,3 +29,14 @@
 SELECT team, park, games, attendance
 FROM homegames
 WHERE games > 10 AND year = 2016;
+
+SELECT *
+FROM parks;
+
+SELECT p.park_name, t.name, h.attendance / h.games AS average_attendance
+FROM homegames AS h
+JOIN teams AS t
+ON h.team = t.teamid
+JOIN parks AS p
+ON h.park = p.park_name
+WHERE h.games > 10 AND h.year = 2016; 
