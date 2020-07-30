@@ -27,30 +27,17 @@
 */
 
 SELECT 
-	h.team, 
-	h.park, 
-	h.attendance / h.games AS avg_attendance,
-	t.name
-FROM homegames AS h
-INNER JOIN teams AS t
-ON t.teamid = h.team
-WHERE games > 10 AND year = 2016;
-
-SELECT *
-FROM homegames;
-
-SELECT p.park_name, t.name, h.attendance / h.games AS average_attendance
-FROM homegames AS h
-JOIN teams AS t
-ON h.team = t.teamid
-JOIN parks AS p
-ON h.park = p.park_name; 
-
-SELECT team, park, attendance / games AS average_attendance 
+	team, 
+	park,
+	attendance / games AS avg_attendance
 FROM homegames
 WHERE games > 10 AND year = 2016;
 
-/*
+
+/* 
+
+THIS QUERY ISN'T DOING WHAT I WANT IT TO.
+
 SELECT
 	teams.name, 
 	parks.park_name, 
@@ -58,23 +45,3 @@ SELECT
 FROM teams, parks, homegames
 WHERE homegames.games > 10 AND homegames.year = 2016;
 */
-
-
-SELECT t.name, p.park_name, h.attendance / h.games AS avg_attendance
-FROM homegames AS h
-INNER JOIN teams AS t
-ON t.teamid = h.team
-INNER JOIN parks AS p
-ON p.park = h.park
-WHERE h.games > 10 AND h.year = 2016;
-
-SELECT *
-FROM homegames;
-
-SELECT *
-FROM teams;
-
-SELECT *
-FROM parks;
-
-/*This is a test for Github */
