@@ -42,7 +42,28 @@ WHERE games > 10 AND year = 2016
 ORDER BY avg_attendance DESC
 LIMIT 5;
 
+/* 
+:::::
+I've decided to only use the teams table. The attendance numbers from the
+homegames table are incomplete. I've found the attendance numbers from the 
+teams table match up to two other online sources. 
+:::::
+*/
 
+SELECT name, park, attendance / g AS avg_attendance
+FROM teams
+WHERE yearid = 2016 AND g > 10
+ORDER BY avg_attendance DESC
+LIMIT 5;
+
+SELECT name, park, attendance / g AS avg_attendance
+FROM teams
+WHERE yearid = 2016 AND g > 10
+ORDER BY avg_attendance ASC
+LIMIT 5;
+
+
+/* 
 SELECT 
 	t.park,
 	t.name,
@@ -52,20 +73,4 @@ LEFT JOIN homegames AS h
 ON t.teamid = h.team
 WHERE t.yearid = 2016 
 ORDER BY avg_attendance DESC;
-
-SELECT g, name, park, attendance
-FROM teams
-WHERE yearid = 2016;
-
-
-/* 
-
-THIS QUERY ISN'T DOING WHAT I WANT IT TO.
-
-SELECT
-	teams.name, 
-	parks.park_name, 
-	homegames.attendance / homegames.games AS average_attendance
-FROM teams, parks, homegames
-WHERE homegames.games > 10 AND homegames.year = 2016;
 */
