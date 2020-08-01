@@ -62,7 +62,7 @@ ON nl.playerid = al.playerid;
 
 /*
 :::::
-Let's check the work by plugging in the playerids from abover query.
+Let's check the work by plugging in the playerids from above query.
 :::::
 */
 
