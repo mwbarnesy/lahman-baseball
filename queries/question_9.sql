@@ -60,7 +60,15 @@ FROM nl_awardsmanagers AS nl
 INNER JOIN al_awardsmanagers AS al
 ON nl.playerid = al.playerid;
 
+/*
+:::::
+Let's check the work by plugging in the playerids from abover query.
+:::::
+*/
 
+SELECT playerid, lgid, yearid
+FROM awardsmanagers
+WHERE playerid = 'leylaji99' OR playerid = 'johnsda02';
 
 SELECT *
 FROM managershalf;
