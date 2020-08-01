@@ -26,11 +26,44 @@
 
 */
 
+/*
+:::::
+This code will return every manager who won the 'TSN Manager of the Year' award. Now I need to figure
+out how to pull up the playerid where the lgid is NL and AL.
+:::::
+*/
+
+SELECT playerid, lgid, yearid
+FROM awardsmanagers
+WHERE awardid = 'TSN Manager of the Year';
+
+/* 
+:::::
+I want to try defining two CTEs and joining them to get playerids that contain both NL and AL.
+:::::
+*/ 
+
+WITH nl_awardsmanagers(playerid) AS (
+	SELECT playerid
+	FROM awardsmanagers
+	WHERE lgid = 'NL' 
+	AND awardid = 'TSN Manager of the Year')
+,
+al_awardsmanagers(playerid) AS (
+	SELECT playerid
+	FROM awardsmanagers
+	WHERE lgid = 'AL' 
+	AND awardid = 'TSN Manager of the Year')
+	
 SELECT *
-FROM managershalf;
+FROM nl_awardsmanagers AS nl
+INNER JOIN al_awardsmanagers AS al
+ON nl.playerid = al.playerid;
+
+
 
 SELECT *
-FROM awardsmanagers;
+FROM managershalf;
 
 SELECT *
 FROM teams;
